@@ -65,9 +65,14 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $category->update($request->all());
+        $products = Product::where('category_id', $category->id)->count();
+        if ($products > 0) {
+            return to_route('categories.edit', $category->id)->with('error', 'Failed to update - Products use this category');
+        } else {
+            $category->update($request->all());
 
-        return to_route('categories.index');
+            return to_route('categories.index')->with('success', 'Category updated successfully.');
+        }
     }
 
     /**
