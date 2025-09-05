@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
-import { Card, CardHeader, CardContent, CardTitle  } from '@/components/ui/card';
-import { edit, index, destroy } from "@/routes/categories";
+import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
+import { edit, index, destroy } from "@/routes/products";
 import { buttonVariants, Button } from '@/components/ui/button';
 import FlashMessages from '@/Components/FlashMessages.vue';
 
 defineProps({
-    category: {
+    product: {
         type: Object,
         required: true
     },
@@ -18,12 +18,12 @@ defineProps({
 
 const breadcrumbs = [
     {
-        title: 'Categories',
-        href: '/categories',
+        title: 'Products',
+        href: '/products',
     },
-        {
-        title: 'Category Details',
-        href: '/categories/show',
+    {
+        title: 'Products Details',
+        href: '/products/show',
     },
 ];
 
@@ -38,7 +38,7 @@ function deleteItem(id) {
 
 <template>
 
-    <Head title="Show Category" />
+    <Head title="Product Details" />
     <AppLayout :breadcrumbs="breadcrumbs">
         <FlashMessages />
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 items-center">
@@ -46,20 +46,47 @@ function deleteItem(id) {
                 <Card class="mt-3">
 
                     <CardHeader>
-                        <CardTitle>Category Details</CardTitle>
+                        <CardTitle>Product Details</CardTitle>
                     </CardHeader>
 
                     <CardContent class="space-y-3">
                         <div class="flex items-center space-x-4">
                             <div class="w-32 font-semibold">Name</div>
-                            <div>{{ category.name }}</div>
+                            <div>{{ product.name }}</div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="w-32 font-semibold">Category</div>
+                            <div>{{ product.category.name }}</div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="w-32 font-semibold">Description</div>
+                            <div>{{ product.description }}</div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="w-32 font-semibold">Quantity</div>
+                            <div>{{ product.quantity }}</div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="w-32 font-semibold">Created By</div>
+                            <div>{{ product.user.name }}</div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="w-32 font-semibold">Created At</div>
+                            <div>{{ product.formatted_created_at }}</div>
                         </div>
 
                         <div class="flex justify-between items-center space-x-4 mt-6">
-                            <Link :href="index()" :class="buttonVariants({variant: 'outline'})">Back</Link>  
+                            <Link :href="index()" :class="buttonVariants({ variant: 'outline' })">Back</Link>
                             <div>
-                                <Link :href="edit.url(category.id)" :class="buttonVariants({variant: 'default'})">Edit</Link> 
-                                <Button @click="deleteItem(category.id)" class="ml-2" variant="destructive">Delete</Button>
+                                <Link :href="edit.url(product.id)" :class="buttonVariants({ variant: 'default' })">Edit
+                                </Link>
+                                <Button @click="deleteItem(product.id)" class="ml-2"
+                                    variant="destructive">Delete</Button>
                             </div>
                         </div>
                     </CardContent>

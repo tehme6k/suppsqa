@@ -11,7 +11,7 @@ class StoreProductRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,25 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:255',  'unique:products,name'],
+            'description' => ['nullable', 'string', 'max:255'],
+            'category_id' => ['required', 'integer', 'exists:categories,id'],
+        ];
+    }
+
+    public function prepareForValidation()
+    {
+        // if($this->name){
+        //     $this->merge([
+        //         'name' => $this->name . ' Mothy'
+        //     ]);
+        // }
+    }
+
+    public function attributes()
+    {
+        return [
+            'category_id' => 'category'
         ];
     }
 }

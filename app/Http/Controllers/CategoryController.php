@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CategoryController extends Controller
@@ -13,12 +14,22 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::latest()->get();
+        // Start with a base query
+        $categoriesQuery = Category::query();
+
+        // Conditionally apply a search filter if a search term is present
+        $categoriesQuery->when($request->has('search'), function ($query) use ($request) {
+            $query->where('name', 'like', "%{$request->input('search')}%");
+        });
+
+        // Paginate the results and append the search query to pagination links
+        $categories = $categoriesQuery->paginate(3)->withQueryString();
 
         return Inertia::render('Category/Index', [
-            'categories' => $categories
+            'categories' => $categories,
+            'filters' => $request->only('search'), // Pass the current search term to the frontend
         ]);
     }
 

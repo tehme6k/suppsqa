@@ -12,6 +12,8 @@ class Product extends Model
     /** @use HasFactory<\Database\Factories\ProductFactory> */
     use HasFactory, SoftDeletes;
 
+    protected $guarded = [];
+
     //model relationships
     public function category(): BelongsTo
     {
@@ -21,5 +23,10 @@ class Product extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getFormattedCreatedAtAttribute()
+    {
+        return $this->created_at->format('M d, Y H:i A'); // Example format
     }
 }
