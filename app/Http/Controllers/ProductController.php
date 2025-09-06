@@ -16,21 +16,34 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        // Start with a base query
-        $productsQuery = Product::query();
+        $products = Product::query()
+            ->when($request->search, function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->when($request->field && $request->direction, function ($query) use ($request) {
+                $query->orderBy($request->field, $request->direction);
+            })
+            ->paginate(10)
+            ->withQueryString()
+            ->through(fn ($product) => [
+                'id' => $product->id,
+                'name' => $product->name,
+                'quantity' => $product->quantity,
+                'description' => $product->description,
+                'created_at' => $product->created_at,
+                'category_id' => $product->category_id,
+                'user_id' => $product->user_id,
+                'category_name' => $product->category->name,
+                'user_name' => $product->user->name,
+            ]);
 
-        // Conditionally apply a search filter if a search term is present
-        $productsQuery->when($request->has('search'), function ($query) use ($request) {
-            $query->where('name', 'like', "%{$request->input('search')}%");
-        });
+            // $products->load('category', 'user');
 
-        // Paginate the results and append the search query to pagination links
-        $products = $productsQuery->paginate(10)->withQueryString();
-        $products->load('category', 'user');
+            // dd($products);
 
         return Inertia::render('Product/Index', [
             'products' => $products,
-            'filters' => $request->only('search'), // Pass the current search term to the frontend
+            'filters' => $request->only('search', 'field', 'direction'),
         ]);
     }
 

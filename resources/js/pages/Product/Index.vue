@@ -7,22 +7,40 @@ import { router } from '@inertiajs/vue3';
 import FlashMessages from '@/Components/FlashMessages.vue';
 import { PaginatedProducts } from '@/types/products';
 import { ref, watch } from 'vue';
+import TableHeader from './TableHeader.vue';
 
 const props = defineProps<{
     products: PaginatedProducts;
     filters: {
         search?: string;
+        field?: string;
+        direction?: 'asc' | 'desc';
     };
 }>();
 
 const search = ref(props.filters.search || '');
+// const sort = ref(props.filters.sort || '');
 
+// Search functionality with debouncing
 watch(search, (value) => {
-    router.get(index(), // Use Laravel's route helper if available
+    router.get(index(),
         { search: value },
         { preserveState: true, replace: true }
     );
-}); // Optional: debounce for performance
+});
+
+// Sorting handler
+function handleSort(field: string) {
+  let direction: 'asc' | 'desc' = 'asc';
+  if (props.filters.field === field && props.filters.direction === 'asc') {
+    direction = 'desc';
+  }
+
+  router.get(index(),
+    { ...props.filters, field, direction },
+    { preserveState: true, replace: true }
+  );
+}
 
 function deleteItem(id) {
     if (confirm("Are you sure?")) {
@@ -65,11 +83,11 @@ const breadcrumbs = [
                 <table class="w-full text-sm text-left text-gray-700">
                     <thead class="text-xs uppercase bg-gray-50 text-gray-700">
                         <tr>
-                            <th scope="col" class="px-6 py-3">ID</th>
-                            <th scope="col" class="px-6 py-3">Name</th>
-                            <th scope="col" class="px-6 py-3">Category</th>
-                            <th scope="col" class="px-6 py-3">Quantity</th>
-                            <th scope="col" class="px-6 py-3">Created By</th>
+                            <TableHeader label="Id" field="id" :filters="filters" @sort="handleSort" />
+                            <TableHeader label="Name" field="name" :filters="filters" @sort="handleSort" />
+                            <TableHeader label="Category" field="category_id" :filters="filters" @sort="handleSort" />
+                            <TableHeader label="Quantity" field="quantity" :filters="filters" @sort="handleSort" />
+                            <TableHeader label="Created By" field="user_id" :filters="filters" @sort="handleSort" />
                             <th scope="col" class="px-6 py-3 w-70">Actions</th>
                         </tr>
                     </thead>
@@ -78,9 +96,9 @@ const breadcrumbs = [
                             class="odd:bg-white even:bg-gray-50 border-b border-gray-200">
                             <td class="px-6 py-2 font-medium text-gray-900">{{ product.id }}</td>
                             <td class="px-6 py-2 text-gray-700">{{ product.name }}</td>
-                            <td class="px-6 py-2 text-gray-700">{{ product.category.name }}</td>
+                            <td class="px-6 py-2 text-gray-700">{{ product.category_name }}</td>
                             <td class="px-6 py-2 text-gray-700">{{ product.quantity }}</td>
-                            <td class="px-6 py-2 text-gray-700">{{ product.user.name }}</td>
+                            <td class="px-6 py-2 text-gray-700">{{ product.user_name }}</td>
                             <td class="px-6 py-2 space-x-1">
                                 <Link :href="edit.url(product.id)"
                                     class="cursor-pointer px-3 py-2 text-xs font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
