@@ -11,18 +11,30 @@ import { ref, watch } from 'vue';
 const props = defineProps<{
     categories: PaginatedCategories;
     filters: {
-        search?: string;
+        search: string | null;
+        sort: string | null;
     };
 }>();
 
-const search = ref(props.filters.search || '');
+    const search = ref(props.filters.search || '');
+    const sort = ref(props.filters.sort || '');
 
-watch(search, (value) => {
-    router.get(index(), // Use Laravel's route helper if available
-        { search: value },
-        { preserveState: true, replace: true }
-    );
-}); // Optional: debounce for performance
+    watch([search, sort], ([newSearch, newSort]) => {
+        router.get(index(),
+            { search: newSearch, sort: newSort },
+            { preserveState: true, replace: true }
+        );
+    });
+
+    const applySort = (column: string) => {
+        if (sort.value === column) {
+            sort.value = '-' + column; // Toggle to descending
+        } else if (sort.value === '-' + column) {
+            sort.value = ''; // Clear sort
+        } else {
+            sort.value = column; // Apply ascending sort
+        }
+    };
 
 function deleteItem(id) {
     if (confirm("Are you sure?")) {
@@ -62,11 +74,12 @@ const breadcrumbs = [
                 </div>
             </div>
             <div class="overflow-x-auto mt-2">
+                {{ sort }}
                 <table class="w-full text-sm text-left text-gray-700">
                     <thead class="text-xs uppercase bg-gray-50 text-gray-700">
                         <tr>
                             <th scope="col" class="px-6 py-3">ID</th>
-                            <th scope="col" class="px-6 py-3">Name</th>
+                            <th scope="col" class="px-6 py-3"><Link @click="applySort('name')">Name &#9660;</Link></th>
                             <th scope="col" class="px-6 py-3 w-70">Actions</th>
                         </tr>
                     </thead>

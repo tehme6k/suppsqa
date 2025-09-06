@@ -24,12 +24,18 @@ class CategoryController extends Controller
             $query->where('name', 'like', "%{$request->input('search')}%");
         });
 
+        if ($request->filled('sort')) {
+            $sortColumn = ltrim($request->sort, '-');
+            $sortDirection = str_starts_with($request->sort, '-') ? 'desc' : 'asc';
+            $categoriesQuery->orderBy($sortColumn, $sortDirection);
+        }
+
         // Paginate the results and append the search query to pagination links
         $categories = $categoriesQuery->paginate(3)->withQueryString();
 
         return Inertia::render('Category/Index', [
             'categories' => $categories,
-            'filters' => $request->only('search'), // Pass the current search term to the frontend
+            'filters' => $request->only('search', 'sort'), // Pass the current search term to the frontend
         ]);
     }
 
