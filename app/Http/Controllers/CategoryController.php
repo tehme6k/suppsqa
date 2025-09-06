@@ -16,26 +16,23 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        // Start with a base query
-        $categoriesQuery = Category::query();
-
-        // Conditionally apply a search filter if a search term is present
-        $categoriesQuery->when($request->has('search'), function ($query) use ($request) {
-            $query->where('name', 'like', "%{$request->input('search')}%");
-        });
-
-        if ($request->filled('sort')) {
-            $sortColumn = ltrim($request->sort, '-');
-            $sortDirection = str_starts_with($request->sort, '-') ? 'desc' : 'asc';
-            $categoriesQuery->orderBy($sortColumn, $sortDirection);
-        }
-
-        // Paginate the results and append the search query to pagination links
-        $categories = $categoriesQuery->paginate(3)->withQueryString();
+        $categories = Category::query()
+            ->when($request->search, function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->when($request->field && $request->direction, function ($query) use ($request) {
+                $query->orderBy($request->field, $request->direction);
+            })
+            ->paginate(10)
+            ->withQueryString()
+            ->through(fn ($category) => [
+                'id' => $category->id,
+                'name' => $category->name,
+            ]);
 
         return Inertia::render('Category/Index', [
             'categories' => $categories,
-            'filters' => $request->only('search', 'sort'), // Pass the current search term to the frontend
+            'filters' => $request->only('search', 'field', 'direction'),
         ]);
     }
 

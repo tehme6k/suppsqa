@@ -7,34 +7,40 @@ import { router } from '@inertiajs/vue3';
 import FlashMessages from '@/Components/FlashMessages.vue';
 import { PaginatedCategories } from '@/types/categories';
 import { ref, watch } from 'vue';
+import TableHeader from './TableHeader.vue';
 
 const props = defineProps<{
     categories: PaginatedCategories;
     filters: {
-        search: string | null;
-        sort: string | null;
+        search?: string;
+        field?: string;
+        direction?: 'asc' | 'desc';
     };
 }>();
 
-    const search = ref(props.filters.search || '');
-    const sort = ref(props.filters.sort || '');
+const search = ref(props.filters.search || '');
+// const sort = ref(props.filters.sort || '');
 
-    watch([search, sort], ([newSearch, newSort]) => {
-        router.get(index(),
-            { search: newSearch, sort: newSort },
-            { preserveState: true, replace: true }
-        );
-    });
+// Search functionality with debouncing
+watch(search, (value) => {
+    router.get(index(),
+        { search: value },
+        { preserveState: true, replace: true }
+    );
+});
 
-    const applySort = (column: string) => {
-        if (sort.value === column) {
-            sort.value = '-' + column; // Toggle to descending
-        } else if (sort.value === '-' + column) {
-            sort.value = ''; // Clear sort
-        } else {
-            sort.value = column; // Apply ascending sort
-        }
-    };
+// Sorting handler
+function handleSort(field: string) {
+  let direction: 'asc' | 'desc' = 'asc';
+  if (props.filters.field === field && props.filters.direction === 'asc') {
+    direction = 'desc';
+  }
+
+  router.get(index(),
+    { ...props.filters, field, direction },
+    { preserveState: true, replace: true }
+  );
+}
 
 function deleteItem(id) {
     if (confirm("Are you sure?")) {
@@ -74,12 +80,12 @@ const breadcrumbs = [
                 </div>
             </div>
             <div class="overflow-x-auto mt-2">
-                {{ sort }}
+                <!-- {{ sort }} -->
                 <table class="w-full text-sm text-left text-gray-700">
                     <thead class="text-xs uppercase bg-gray-50 text-gray-700">
                         <tr>
-                            <th scope="col" class="px-6 py-3">ID</th>
-                            <th scope="col" class="px-6 py-3"><Link @click="applySort('name')">Name &#9660;</Link></th>
+                            <TableHeader label="Id" field="id" :filters="filters" @sort="handleSort" />
+                            <TableHeader label="Name" field="name" :filters="filters" @sort="handleSort" />
                             <th scope="col" class="px-6 py-3 w-70">Actions</th>
                         </tr>
                     </thead>
