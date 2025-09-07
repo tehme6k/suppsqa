@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\Brand;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -32,12 +33,12 @@ class ProductController extends Controller
                 'description' => $product->description,
                 'created_at' => $product->created_at,
                 'category_id' => $product->category_id,
+                'brand_id' => $product->brand_id,
                 'user_id' => $product->user_id,
                 'category_name' => $product->category->name,
                 'user_name' => $product->user->name,
+                'brand_name' => $product->brand->name,
             ]);
-
-            // $products->load('category', 'user');
 
             // dd($products);
 
@@ -53,8 +54,10 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::orderBy('name', 'asc')->get();
+        $brands = Brand::orderBy('name', 'asc')->get();
         return Inertia::render('Product/Create', [
-            'categories' => $categories
+            'categories' => $categories,
+            'brands' => $brands
         ]);
     }
 
@@ -74,7 +77,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $product->load('category', 'user');
+        $product->load('category','brand','user');
         $product->append('formatted_created_at')->toArray();
         return Inertia::render('Product/Show', [
             'product' => $product
@@ -87,9 +90,11 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $categories = Category::orderBy('name', 'asc')->get();
+        $brands = Brand::orderBy('name', 'asc')->get();
         return Inertia::render('Product/Edit', [
             'product' => $product,
-            'categories' => $categories
+            'categories' => $categories,
+            'brands' => $brands
         ]);
     }
 

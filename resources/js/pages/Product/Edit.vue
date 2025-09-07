@@ -22,6 +22,10 @@ const props = defineProps({
         type: Array, 
         required: true
     },
+    brands: {
+        type: Array,
+        required: true
+    },
     flash: {
         type: Object
     }
@@ -29,6 +33,7 @@ const props = defineProps({
 
 const form = useForm({
     name: props.product.name,
+    brand_id: props.product.brand_id,
     category_id: props.product.category_id,
     description: props.product.description
 })
@@ -72,20 +77,38 @@ const breadcrumbs = [
                                 <InputError :message="form.errors.name" />
                             </div>
 
-                            <div class="grid w-full gap-2">
-                                <Label for="category_id">Category</Label>
-                                <Select id="name" v-model="form.category_id">
-                                    <SelectTrigger class="w-full">
-                                        <SelectValue placeholder="Select a category" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem v-for="category in categories" :key="category.id"
-                                            :value="category.id">
-                                            {{ category.name }}
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
-                                <InputError :message="form.errors.category_id" />
+ <div class="grid grid-cols-2 gap-6">
+                                <div class="grid w-full gap-2">
+                                    <Label for="brand_id">Brand</Label>
+                                    <Select id="name" v-model="form.brand_id">
+                                        <SelectTrigger class="w-full">
+                                            <SelectValue placeholder="Select a brand" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem v-for="brand in brands" :key="brand.id" :value="brand.id">
+                                                {{ brand.name }}
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <InputError :message="form.errors.brand_id" />
+                                </div>
+
+
+                                <div class="grid w-full gap-2">
+                                    <Label for="category_id">Category</Label>
+                                    <Select id="name" v-model="form.category_id">
+                                        <SelectTrigger class="w-full">
+                                            <SelectValue placeholder="Select a category" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem v-for="category in categories" :key="category.id"
+                                                :value="category.id">
+                                                {{ category.name }}
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <InputError :message="form.errors.category_id" />
+                                </div>
                             </div>
 
                             <div class="grid w-full gap-2">

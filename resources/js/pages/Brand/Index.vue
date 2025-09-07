@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import { create, destroy, index, edit, show } from "@/routes/categories"; // Assuming 'categories.show' is a named route
+import { create, destroy, index, edit, show } from "@/routes/brands"; // Assuming 'categories.show' is a named route
 import { Head, Link } from '@inertiajs/vue3';
 import { Button } from '@/components/ui/button';
 import { router } from '@inertiajs/vue3';
 import FlashMessages from '@/Components/FlashMessages.vue';
-import { PaginatedCategories } from '@/types/categories';
+import { PaginatedBrands } from '@/types/brands';
 import { ref, watch } from 'vue';
 import TableHeader from '@/Components/TableHeader.vue';
 
 const props = defineProps<{
-    categories: PaginatedCategories;
+    brands: PaginatedBrands;
     filters: {
         search?: string;
         field?: string;
@@ -53,15 +53,15 @@ function deleteItem(id) {
 const breadcrumbs = [
 
     {
-        title: 'Categories',
-        href: '/categories',
+        title: 'Brands',
+        href: '/brands',
     },
 ];
 </script>
 
 <template>
 
-    <Head title="Categories" />
+    <Head title="Brands" />
     <AppLayout :breadcrumbs="breadcrumbs">
         <FlashMessages />
         <div class="p-3">
@@ -70,12 +70,12 @@ const breadcrumbs = [
                 <div>
                     <Link :href="create()"
                         class="mb-2 px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
-                    Add category
+                    Add a brand
                     </Link>
                 </div>
 
                 <div class="">
-                    <input type="text" v-model="search" placeholder="Search categories"
+                    <input type="text" v-model="search" placeholder="Search brands"
                         class="border border-gray-300 p-2 rounded-md mr-5 w-[400px]" />
                 </div>
             </div>
@@ -90,20 +90,20 @@ const breadcrumbs = [
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="category in categories.data"
+                        <tr v-for="brand in brands.data"
                             class="odd:bg-white even:bg-gray-50 border-b border-gray-200">
-                            <td class="px-6 py-2 font-medium text-gray-900">{{ category.id }}</td>
-                            <td class="px-6 py-2 text-gray-700">{{ category.name }}</td>
+                            <td class="px-6 py-2 font-medium text-gray-900">{{ brand.id }}</td>
+                            <td class="px-6 py-2 text-gray-700">{{ brand.name }}</td>
                             <td class="px-6 py-2 space-x-1">
-                                <Link :href="edit(category.id)"
+                                <Link :href="edit(brand.id)"
                                     class="cursor-pointer px-3 py-2 text-xs font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
                                 Edit
                                 </Link>
-                                <Link :href="show(category.id)"
+                                <Link :href="show(brand.id)"
                                     class="cursor-pointer px-3 py-2 text-xs font-medium text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300">
                                 Show
                                 </Link>
-                                <Button @click="deleteItem(category.id)"
+                                <Button @click="deleteItem(brand.id)"
                                     class="cursor-pointer px-3 py-2 text-xs font-medium text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300">
                                     Delete
                                 </Button>
@@ -115,7 +115,7 @@ const breadcrumbs = [
                 <!-- Pagination: -->
                 <nav class="flex justify-center mt-5" aria-label="Page navigation example">
                     <ul class="inline-flex -space-x-px text-sm">
-                        <li v-for="link in props.categories.links" :key="link.label" :disabled="!link.url">
+                        <li v-for="link in props.brands.links" :key="link.label" :disabled="!link.url">
                             <a :active="link.active" v-if="link.url" :href="link.url" v-html="link.label"
                                 :class="['flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white', { 'active-class': link.active }]"></a>
                             <span v-else v-html="link.label"

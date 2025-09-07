@@ -61,6 +61,11 @@ function deleteItem(id) {
                         </div>
 
                         <div class="flex items-center space-x-4">
+                            <div class="w-32 font-semibold">Brand</div>
+                            <div>{{ product.brand.name }}</div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
                             <div class="w-32 font-semibold">Description</div>
                             <div>{{ product.description }}</div>
                         </div>

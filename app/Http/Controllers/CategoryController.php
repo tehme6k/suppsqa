@@ -59,6 +59,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
+        $category->append('formatted_created_at')->toArray();
         return Inertia::render('Category/Show', [
             'category' => $category
         ]);

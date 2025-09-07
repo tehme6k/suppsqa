@@ -7,23 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Category extends Model
+class Brand extends Model
 {
-    /** @use HasFactory<\Database\Factories\CategoryFactory> */
+    /** @use HasFactory<\Database\Factories\BrandFactory> */
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['name'];
 
-    public function getFormattedCreatedAtAttribute()
-    {
-        return $this->created_at->format('M d, Y H:i A'); // Example format
-    }
-
-    //model relationships
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
     }
 
-    
+    public function getFormattedCreatedAtAttribute()
+    {
+        return $this->created_at->format('M d, Y H:i A'); // Example format
+    }
 }
