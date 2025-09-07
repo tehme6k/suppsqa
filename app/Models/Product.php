@@ -20,9 +20,9 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function brand(): BelongsTo
+    public function vendor(): BelongsTo
     {
-        return $this->belongsTo(Brand::class);
+        return $this->belongsTo(Vendor::class);
     }
 
     public function user(): BelongsTo

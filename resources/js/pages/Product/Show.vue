@@ -3,6 +3,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import { edit, index, destroy } from "@/routes/products";
+import { show as categoryShow } from "@/routes/categories";
 import { buttonVariants, Button } from '@/components/ui/button';
 import FlashMessages from '@/Components/FlashMessages.vue';
 
@@ -57,12 +58,12 @@ function deleteItem(id) {
 
                         <div class="flex items-center space-x-4">
                             <div class="w-32 font-semibold">Category</div>
-                            <div>{{ product.category.name }}</div>
+                            <div><Link :href="categoryShow(product.category.id)">{{ product.category.name }}</Link></div>
                         </div>
 
                         <div class="flex items-center space-x-4">
-                            <div class="w-32 font-semibold">Brand</div>
-                            <div>{{ product.brand.name }}</div>
+                            <div class="w-32 font-semibold">Vendor</div>
+                            <div>{{ product.vendor.name }}</div>
                         </div>
 
                         <div class="flex items-center space-x-4">
@@ -86,7 +87,7 @@ function deleteItem(id) {
                         </div>
 
                         <div class="flex justify-between items-center space-x-4 mt-6">
-                            <Link :href="index()" :class="buttonVariants({ variant: 'outline' })">Back</Link>
+                            <Link :href="index()" :class="buttonVariants({ variant: 'outline' })">Back to Products</Link>
                             <div>
                                 <Link :href="edit.url(product.id)" :class="buttonVariants({ variant: 'default' })">Edit
                                 </Link>

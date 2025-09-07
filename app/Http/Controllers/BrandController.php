@@ -25,7 +25,7 @@ class BrandController extends Controller
             })
             ->paginate(10)
             ->withQueryString()
-            ->through(fn ($brand) => [
+            ->through(fn($brand) => [
                 'id' => $brand->id,
                 'name' => $brand->name,
             ]);
@@ -80,14 +80,9 @@ class BrandController extends Controller
      */
     public function update(UpdateBrandRequest $request, Brand $brand)
     {
-        $products = Product::where('brand_id', $brand->id)->count();
-        if ($products > 0) {
-            return to_route('brands.edit', $brand->id)->with('error', 'Failed to update - Products use this brand');
-        } else {
-            $brand->update($request->all());
+        $brand->update($request->all());
 
-            return to_route('brands.index')->with('success', 'Brand updated successfully.');
-        }
+        return to_route('brands.index')->with('success', 'Brand updated successfully.');
     }
 
     /**
@@ -95,13 +90,8 @@ class BrandController extends Controller
      */
     public function destroy(Brand $brand)
     {
-        $products = Product::where('category_id', $brand->id)->count();
-        if ($products > 0) {
-            return back()->with('error', 'Failed to delete - Products use this brand');
-        } else {
-            $brand->delete();
+        $brand->delete();
 
-            return to_route('brands.index')->with('success', 'Brand deleted successfully.');
-        }
+        return to_route('brands.index')->with('success', 'Brand deleted successfully.');
     }
 }

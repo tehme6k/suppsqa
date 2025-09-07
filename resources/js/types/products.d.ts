@@ -2,7 +2,7 @@ export interface Category {
   id: number;
   name: string;
 }
-export interface Brand {
+export interface Vendor {
   id: number;
   name: string;
 }
@@ -19,7 +19,7 @@ export interface Product {
   created_at: string;
   category: Category;
   user: User;
-  brand: Brand;
+  vendor: Vendor;
 }
 
 export interface PaginationLink {

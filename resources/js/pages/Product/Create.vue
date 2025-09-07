@@ -17,7 +17,7 @@ import { Textarea } from "@/components/ui/textarea"
 const form = useForm({
     name: '',
     category_id: '',
-    brand_id: '',
+    vendor_id: '',
     description: ''
 })
 
@@ -26,7 +26,7 @@ defineProps({
         type: Array,
         required: true
     },
-    brands: {
+    vendors: {
         type: Array,
         required: true
     },
@@ -86,18 +86,18 @@ const breadcrumbs = [
 
                             <div class="grid grid-cols-2 gap-6">
                                 <div class="grid w-full gap-2">
-                                    <Label for="brand_id">Brand</Label>
-                                    <Select id="name" v-model="form.brand_id">
+                                    <Label for="brand_id">Vendor</Label>
+                                    <Select id="name" v-model="form.vendor_id">
                                         <SelectTrigger class="w-full">
-                                            <SelectValue placeholder="Select a brand" />
+                                            <SelectValue placeholder="Select a vendor" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem v-for="brand in brands" :key="brand.id" :value="brand.id">
-                                                {{ brand.name }}
+                                            <SelectItem v-for="vendor in vendors" :key="vendor.id" :value="vendor.id">
+                                                {{ vendor.name }}
                                             </SelectItem>
                                         </SelectContent>
                                     </Select>
-                                    <InputError :message="form.errors.brand_id" />
+                                    <InputError :message="form.errors.vendor_id" />
                                 </div>
 
 

@@ -19,10 +19,10 @@ const props = defineProps({
         required: true
     },
     categories: {
-        type: Array, 
+        type: Array,
         required: true
     },
-    brands: {
+    vendors: {
         type: Array,
         required: true
     },
@@ -33,7 +33,7 @@ const props = defineProps({
 
 const form = useForm({
     name: props.product.name,
-    brand_id: props.product.brand_id,
+    vendor_id: props.product.vendor_id,
     category_id: props.product.category_id,
     description: props.product.description
 })
@@ -77,20 +77,20 @@ const breadcrumbs = [
                                 <InputError :message="form.errors.name" />
                             </div>
 
- <div class="grid grid-cols-2 gap-6">
+                            <div class="grid grid-cols-2 gap-6">
                                 <div class="grid w-full gap-2">
-                                    <Label for="brand_id">Brand</Label>
-                                    <Select id="name" v-model="form.brand_id">
+                                    <Label for="vendor_id">Vendor</Label>
+                                    <Select id="vendor_id" v-model="form.vendor_id">
                                         <SelectTrigger class="w-full">
-                                            <SelectValue placeholder="Select a brand" />
+                                            <SelectValue placeholder="Select a vendor" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem v-for="brand in brands" :key="brand.id" :value="brand.id">
-                                                {{ brand.name }}
+                                            <SelectItem v-for="vendor in vendors" :key="vendor.id" :value="vendor.id">
+                                                {{ vendor.name }}
                                             </SelectItem>
                                         </SelectContent>
                                     </Select>
-                                    <InputError :message="form.errors.brand_id" />
+                                    <InputError :message="form.errors.vendor_id" />
                                 </div>
 
 

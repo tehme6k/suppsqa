@@ -61,7 +61,7 @@ function deleteItem(id) {
                         </div>
 
                         <div class="flex justify-between items-center space-x-4 mt-6">
-                            <Link :href="index()" :class="buttonVariants({ variant: 'outline' })">Back</Link>
+                            <Link :href="index()" :class="buttonVariants({ variant: 'outline' })">Back to Brands</Link>
                             <div>
                                 <Link :href="edit.url(brand.id)" :class="buttonVariants({ variant: 'default' })">Edit
                                 </Link>

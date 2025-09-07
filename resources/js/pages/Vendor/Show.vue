@@ -2,15 +2,13 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
-import { edit, index, destroy } from "@/routes/categories";
+import { edit, index, destroy } from "@/routes/vendors";
 import { buttonVariants, Button } from '@/components/ui/button';
 import FlashMessages from '@/Components/FlashMessages.vue';
 
-function goBack()  {
-    window.history.back()
-}
+
 defineProps({
-    category: {
+    vendor: {
         type: Object,
         required: true
     },
@@ -21,12 +19,12 @@ defineProps({
 
 const breadcrumbs = [
     {
-        title: 'Categories',
-        href: '/categories',
+        title: 'Vendors',
+        href: '/vendors',
     },
     {
-        title: 'Category Details',
-        href: '/categories/show',
+        title: 'Vendor Details',
+        href: '/vendors/show',
     },
 ];
 
@@ -41,7 +39,7 @@ function deleteItem(id) {
 
 <template>
 
-    <Head title="Show Category" />
+    <Head title="Show Vendor details" />
     <AppLayout :breadcrumbs="breadcrumbs">
         <FlashMessages />
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 items-center">
@@ -49,26 +47,46 @@ function deleteItem(id) {
                 <Card class="mt-3">
 
                     <CardHeader>
-                        <CardTitle>Category Details</CardTitle>
+                        <CardTitle>Vendor Details</CardTitle>
                     </CardHeader>
 
                     <CardContent class="space-y-3">
                         <div class="flex items-center space-x-4">
                             <div class="w-32 font-semibold">Name</div>
-                            <div>{{ category.name }}</div>
+                            <div>{{ vendor.name }}</div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="w-32 font-semibold">Website</div>
+                            <div>{{ vendor.website }}</div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="w-32 font-semibold">Email</div>
+                            <div>{{ vendor.email }}</div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="w-32 font-semibold">Phone Number</div>
+                            <div>{{ vendor.phone_number }}</div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="w-32 font-semibold">Contact Name</div>
+                            <div>{{ vendor.contact_name }}</div>
                         </div>
 
                         <div class="flex items-center space-x-4">
                             <div class="w-32 font-semibold">Created at</div>
-                            <div>{{ category.formatted_created_at }}</div>
+                            <div>{{ vendor.formatted_created_at }}</div>
                         </div>
 
                         <div class="flex justify-between items-center space-x-4 mt-6">
-                            <Link :href="index()" :class="buttonVariants({ variant: 'outline' })">Back to Categories</Link>
+                            <Link :href="index()" :class="buttonVariants({ variant: 'outline' })">Back to Vendors</Link>
                             <div>
-                                <Link :href="edit(category.id)" :class="buttonVariants({ variant: 'default' })">Edit
+                                <Link :href="edit(vendor.id)" :class="buttonVariants({ variant: 'default' })">Edit
                                 </Link>
-                                <Button @click="deleteItem(category.id)" class="ml-2"
+                                <Button @click="deleteItem(vendor.id)" class="ml-2"
                                     variant="destructive">Delete</Button>
                             </div>
                         </div>

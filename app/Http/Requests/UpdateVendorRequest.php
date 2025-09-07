@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateBrandRequest extends FormRequest
+class UpdateVendorRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,9 +21,14 @@ class UpdateBrandRequest extends FormRequest
      */
     public function rules(): array
     {
-        $brandId = $this->route('brand')->id;
+        $vendorId = $this->route('vendor')->id;
         return [
-            'name' => 'required|max:255|unique:brands,name,'.$brandId
+            'name' => 'required|string|max:255|unique:vendors,name,'.$vendorId,
+            'website' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone_number' => 'nullable|string|max:255',
+            'contact_name' => 'nullable|string|max:255',
+            'notes' => 'nullable|string|max:255',
         ];
     }
 }
