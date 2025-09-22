@@ -9,9 +9,9 @@ import { Label } from '@/components/ui/label';
 import InputError from '@/components/InputError.vue';
 import FlashMessages from '@/Components/FlashMessages.vue';
 import {
-    Select, SelectContent, SelectItem, SelectLabel, SelectTrigger, SelectValue,
-} from '@/components/ui/select'
-import { Textarea } from "@/components/ui/textarea"
+    Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from '@/components/ui/select';
+import { Textarea } from "@/components/ui/textarea";
 
 const props = defineProps({
     product: {
@@ -22,18 +22,13 @@ const props = defineProps({
         type: Array,
         required: true
     },
-    vendors: {
-        type: Array,
-        required: true
-    },
     flash: {
         type: Object
     }
-})
+});
 
 const form = useForm({
     name: props.product.name,
-    vendor_id: props.product.vendor_id,
     category_id: props.product.category_id,
     description: props.product.description
 })
@@ -77,21 +72,8 @@ const breadcrumbs = [
                                 <InputError :message="form.errors.name" />
                             </div>
 
-                            <div class="grid grid-cols-2 gap-6">
-                                <div class="grid w-full gap-2">
-                                    <Label for="vendor_id">Vendor</Label>
-                                    <Select id="vendor_id" v-model="form.vendor_id">
-                                        <SelectTrigger class="w-full">
-                                            <SelectValue placeholder="Select a vendor" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem v-for="vendor in vendors" :key="vendor.id" :value="vendor.id">
-                                                {{ vendor.name }}
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                    <InputError :message="form.errors.vendor_id" />
-                                </div>
+                            <!-- <div class="grid grid-cols-2 gap-6"> -->
+
 
 
                                 <div class="grid w-full gap-2">
@@ -109,7 +91,7 @@ const breadcrumbs = [
                                     </Select>
                                     <InputError :message="form.errors.category_id" />
                                 </div>
-                            </div>
+                            <!-- </div> -->
 
                             <div class="grid w-full gap-2">
                                 <Label for="description">Description</Label>

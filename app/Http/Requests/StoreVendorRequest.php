@@ -31,4 +31,12 @@ class StoreVendorRequest extends FormRequest
 
         ];
     }
+
+        public function attributes()
+    {
+        return [
+            'phone_number' => 'phone number',
+            'contact_name' => 'contact name'
+        ];
+    }
 }

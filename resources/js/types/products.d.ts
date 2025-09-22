@@ -2,10 +2,6 @@ export interface Category {
   id: number;
   name: string;
 }
-export interface Vendor {
-  id: number;
-  name: string;
-}
 
 export interface User {
   id: number;
@@ -19,7 +15,6 @@ export interface Product {
   created_at: string;
   category: Category;
   user: User;
-  vendor: Vendor;
 }
 
 export interface PaginationLink {

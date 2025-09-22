@@ -7,26 +7,21 @@ import { buttonVariants, Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import InputError from '@/components/InputError.vue';
-import { toast } from 'vue-sonner'
+import { toast } from 'vue-sonner'; 
 import {
-    Select, SelectContent, SelectItem, SelectLabel, SelectTrigger, SelectValue,
-} from '@/components/ui/select'
-import { Textarea } from "@/components/ui/textarea"
+    Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from '@/components/ui/select';
+import { Textarea } from "@/components/ui/textarea";
 // import SelectLabel from '@/components/ui/select/SelectLabel.vue';
 
 const form = useForm({
     name: '',
     category_id: '',
-    vendor_id: '',
     description: ''
 })
 
 defineProps({
     categories: {
-        type: Array,
-        required: true
-    },
-    vendors: {
         type: Array,
         required: true
     },
@@ -84,22 +79,6 @@ const breadcrumbs = [
                             </div>
 
 
-                            <div class="grid grid-cols-2 gap-6">
-                                <div class="grid w-full gap-2">
-                                    <Label for="brand_id">Vendor</Label>
-                                    <Select id="name" v-model="form.vendor_id">
-                                        <SelectTrigger class="w-full">
-                                            <SelectValue placeholder="Select a vendor" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem v-for="vendor in vendors" :key="vendor.id" :value="vendor.id">
-                                                {{ vendor.name }}
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                    <InputError :message="form.errors.vendor_id" />
-                                </div>
-
 
                                 <div class="grid w-full gap-2">
                                     <Label for="category_id">Category</Label>
@@ -116,7 +95,7 @@ const breadcrumbs = [
                                     </Select>
                                     <InputError :message="form.errors.category_id" />
                                 </div>
-                            </div>
+                            
 
                             <div class="grid w-full gap-2">
                                 <Label for="description">Description</Label>

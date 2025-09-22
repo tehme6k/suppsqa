@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->bigInteger('quantity')->default(0);
             $table->foreignId('category_id')->constrained();    
-            $table->foreignId('vendor_id')->constrained();  
+            // $table->foreignId('vendor_id')->constrained();  
             $table->text('description')->nullable();        
             $table->foreignId('user_id')->constrained();
             $table->softDeletes();

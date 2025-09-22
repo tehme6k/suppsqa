@@ -86,7 +86,6 @@ const breadcrumbs = [
                             <TableHeader label="Id" field="id" :filters="filters" @sort="handleSort" />
                             <TableHeader label="Name" field="name" :filters="filters" @sort="handleSort" />
                             <TableHeader label="Category" field="category_id" :filters="filters" @sort="handleSort" />
-                            <TableHeader label="Vendor" field="vendor_id" :filters="filters" @sort="handleSort" />
                             <TableHeader label="Quantity" field="quantity" :filters="filters" @sort="handleSort" />
                             <TableHeader label="Created By" field="user_id" :filters="filters" @sort="handleSort" />
                             <th scope="col" class="px-6 py-3 w-70">Actions</th>
@@ -98,7 +97,6 @@ const breadcrumbs = [
                             <td class="px-6 py-2 font-medium text-gray-900">{{ product.id }}</td>
                             <td class="px-6 py-2 text-gray-700">{{ product.name }}</td>
                             <td class="px-6 py-2 text-gray-700">{{ product.category_name }}</td>
-                            <td class="px-6 py-2 text-gray-700">{{ product.vendor_name }}</td>
                             <td class="px-6 py-2 text-gray-700">{{ product.quantity }}</td>
                             <td class="px-6 py-2 text-gray-700">{{ product.user_name }}</td>
                             <td class="px-6 py-2 space-x-1">

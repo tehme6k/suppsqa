@@ -15,5 +15,6 @@ require __DIR__.'/categories.php';
 require __DIR__.'/vendors.php';
 require __DIR__.'/brands.php';
 require __DIR__.'/products.php';
+require __DIR__.'/inventories.php';
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

@@ -34,11 +34,9 @@ class ProductController extends Controller
                 'description' => $product->description,
                 'created_at' => $product->created_at,
                 'category_id' => $product->category_id,
-                'vendor_id' => $product->vendor_id,
                 'user_id' => $product->user_id,
                 'category_name' => $product->category->name,
-                'user_name' => $product->user->name,
-                'vendor_name' => $product->vendor->name,
+                'user_name' => $product->user->name,                
             ]);
 
             // dd($products);
@@ -55,10 +53,8 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::orderBy('name', 'asc')->get();
-        $vendors = Vendor::orderBy('name', 'asc')->get();
         return Inertia::render('Product/Create', [
-            'categories' => $categories,
-            'vendors' => $vendors
+            'categories' => $categories
         ]);
     }
 
@@ -78,7 +74,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $product->load('category','vendor','user');
+        $product->load('category','user');
         $product->append('formatted_created_at')->toArray();
         return Inertia::render('Product/Show', [
             'product' => $product
@@ -94,8 +90,7 @@ class ProductController extends Controller
         $vendors = Vendor::orderBy('name', 'asc')->get();
         return Inertia::render('Product/Edit', [
             'product' => $product,
-            'categories' => $categories,
-            'vendors' => $vendors
+            'categories' => $categories
         ]);
     }
 

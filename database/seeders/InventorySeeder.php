@@ -2,8 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\Inventory;
+use App\Models\Product;
+use App\Models\User;
+use App\Models\Vendor;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Faker\Factory as Faker;
 
 class InventorySeeder extends Seeder
 {
@@ -12,6 +17,71 @@ class InventorySeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        // $randomUserId = User::inRandomOrder()->first()->id;
+        // $randomProductId = User::inRandomOrder()->first()->id;
+        // $randomVendorId = Vendor::inRandomOrder()->first()->id;
+        $faker = Faker::create();
+        Inventory::create([
+            'product_id' => '1',
+            'quarantine_user' => User::inRandomOrder()->first()->id,
+            'vendor_id' => Vendor::inRandomOrder()->first()->id,
+            'lot_number' => 'abc123',
+            'facility_location' => 'quarantine',
+            'adjustment_type' => 'shipment',
+            'quantity' => '300',
+            'uom' => 'kg',
+            'expiration_date' => $faker->dateTimeBetween('+1 month', '+1 year')
+        ]);
+
+        $prod1 = Product::find(1);
+        $prod1->quantity = $prod1->quantity + 300;
+        $prod1->save(); 
+        
+
+        Inventory::create([
+            'product_id' => '1',
+            'quarantine_user' => User::inRandomOrder()->first()->id,
+            'vendor_id' => Vendor::inRandomOrder()->first()->id,
+            'lot_number' => 'abc123',
+            'facility_location' => 'quarantine',
+            'adjustment_type' => 'shipment',
+            'quantity' => '600',
+            'uom' => 'kg',
+            'expiration_date' => $faker->dateTimeBetween('+1 month', '+1 year')
+        ]);
+        // $prod1 = Product::find(1);
+        $prod1->quantity = $prod1->quantity + 600;
+        $prod1->save(); 
+
+        Inventory::create([
+            'product_id' => '1',
+            'quarantine_user' => User::inRandomOrder()->first()->id,
+            'vendor_id' => Vendor::inRandomOrder()->first()->id,
+            'lot_number' => 'abc123',
+            'facility_location' => 'quarantine',
+            'adjustment_type' => 'shipment',
+            'quantity' => '100',
+            'uom' => 'kg',
+            'expiration_date' => $faker->dateTimeBetween('+1 month', '+1 year')
+        ]);
+        // $prod1 = Product::find(1);
+        $prod1->quantity = $prod1->quantity + 100;
+        $prod1->save(); 
+
+        Inventory::create([
+            'product_id' => 2,
+            'quarantine_user' => User::inRandomOrder()->first()->id,
+            'vendor_id' => Vendor::inRandomOrder()->first()->id,
+            'lot_number' => 'xyz567',
+            'facility_location' => 'quarantine',
+            'adjustment_type' => 'shipment',
+            'quantity' => '700',
+            'uom' => 'kg',
+            'expiration_date' => $faker->dateTimeBetween('+1 month', '+1 year')
+        ]);
+
+        $prod1->quantity = $prod1->quantity + 700;
+        $prod1->save(); 
+
     }
 }
