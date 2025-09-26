@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Inventory;
 use App\Http\Requests\StoreInventoryRequest;
+use App\Http\Requests\AdjustInventoryRequest;
 use App\Http\Requests\UpdateInventoryRequest;
 use App\Models\Product;
 use App\Models\Vendor;
@@ -118,40 +119,43 @@ class InventoryController extends Controller
 
         // dd($inventory);
 
-        $quarantineQty = Inventory::query()
-            ->where('product_id', $inventory->product_id)
-            ->where('facility_location', 'quarantine')
-            ->where('lot_number', $inventory->lot_number)
-            ->sum('quantity');
+        // $quarantineQty = Inventory::query()
+        //     ->where('product_id', $inventory->product_id)
+        //     ->where('facility_location', 'quarantine')
+        //     ->where('lot_number', $inventory->lot_number)
+        //     ->sum('quantity');
 
-        $warehouseQty = Inventory::query()
-            ->where('product_id', $inventory->product_id)
-            ->where('facility_location', 'warehouse')
-            ->where('lot_number', $inventory->lot_number)
-            ->sum('quantity');
+        // $warehouseQty = Inventory::query()
+        //     ->where('product_id', $inventory->product_id)
+        //     ->where('facility_location', 'warehouse')
+        //     ->where('lot_number', $inventory->lot_number)
+        //     ->sum('quantity');
 
-        $productionQty = Inventory::query()
-            ->where('product_id', $inventory->product_id)
-            ->where('facility_location', 'production')
-            ->where('lot_number', $inventory->lot_number)
-            ->sum('quantity');
+        // $productionQty = Inventory::query()
+        //     ->where('product_id', $inventory->product_id)
+        //     ->where('facility_location', 'production')
+        //     ->where('lot_number', $inventory->lot_number)
+        //     ->sum('quantity');
 
 
-        $quarantineByLot = Inventory::query()
-            // ->select('product_id','lot_number')
-            ->where('product_id', $inventory->product_id)
-            ->where('facility_location', 'quarantine')
-            ->selectRaw('SUM(quantity) as total_quantity_quarantine')
-            ->groupBy('product_id', 'lot_number')
-            ->orderBy('lot_number')
-            ->get();
+        // $quarantineByLot = Inventory::query()
+        //     // ->select('product_id','lot_number')
+        //     ->where('product_id', $inventory->product_id)
+        //     ->where('facility_location', 'quarantine')
+        //     ->selectRaw('SUM(quantity) as total_quantity_quarantine')
+        //     ->groupBy('product_id', 'lot_number')
+        //     ->orderBy('lot_number')
+        //     ->get();
 
-        $quarantineByLot->load('product');
+        // $quarantineByLot->load('product');
 
-        dd($quarantineByLot);
+        // dd($quarantineQty, $warehouseQty, $productionQty, $quarantineByLot);
 
-        return Inertia::render('Inventory/Index', [
-            'inventoryByLot' => $inventoryByLot,
+        $inventory->load('product','quarantineUser','approveUser','vendor');
+        $inventory->append('formatted_created_at')->toArray();
+        // dd($inventory);
+        return Inertia::render('Inventory/Show', [
+            'inventory' => $inventory
         ]);
     }
 
@@ -187,8 +191,24 @@ class InventoryController extends Controller
         // }
 
         $inventory->facility_location = 'warehouse';
+        $inventory->approve_user = auth()->user()->id;
         $inventory->save();
 
         return to_route('inventories.index')->with('success', 'Inventory approved successfully');
+    }
+
+    public function adjust(Inventory $inventory) 
+    {
+        $user = auth()->user();
+        $vendors = Vendor::orderBy('name', 'asc')->get();
+        $products = Product::orderBy('name', 'asc')->get();
+        $inventory->load('product','vendor');
+        // dd($inventory);
+        return Inertia::render('Inventory/Adjust', [
+            'vendors' => $vendors,
+            'products' => $products,
+            'user' => $user,
+            'inventory' => $inventory,
+        ]);
     }
 }

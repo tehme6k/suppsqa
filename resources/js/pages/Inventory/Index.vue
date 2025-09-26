@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import { show, create, edit, destroy, index } from "@/routes/inventories"; // Assuming 'categories.show' is a named route
+import { show, create, destroy, index } from "@/routes/inventories"; // Assuming 'categories.show' is a named route
+import { adjust } from "@/routes/inventory"; // Assuming 'categories.show' is a named route
 import { approve } from "@/routes/inventory"; // Assuming 'categories.show' is a named route
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { Button } from '@/components/ui/button';
@@ -145,6 +146,11 @@ const breadcrumbs = [
                                     class="cursor-pointer px-3 py-2 text-xs font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
                                     Approve
                                 </Button>
+
+                                <Link v-else :href="adjust.url(inventory.id)"
+                                    class="cursor-pointer px-3 py-2 text-xs font-medium text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-green-300">
+                                    Adjustment
+                                </Link>
 
                                 <!-- <Button @click="deleteItem(inventory.id)"
                                     class="cursor-pointer px-3 py-2 text-xs font-medium text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300">
