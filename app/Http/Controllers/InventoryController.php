@@ -211,4 +211,63 @@ class InventoryController extends Controller
             'inventory' => $inventory,
         ]);
     }
+
+    public function storeAdjustment(AdjustInventoryRequest $request) 
+    {
+
+        if($request->adjustment_type == 'adjust down' || $request->adjustment_type == 'batch out'){           
+            $request->merge(['quantity' => $request->quantity * -1]);            
+        }
+
+        if($request->adjustment_type == 'batch out'){
+            $request->merge(['facility_location' => 'production']);
+        } elseif ($request->adjustment_type == 'damaged'){
+            $request->merge(['facility_location' => 'quarantine']);
+        } else {
+            $request->merge(['facility_location' => 'warehouse']);
+        }
+
+        // dd($request->all());
+
+        $inv = new Inventory();
+
+        $create = $inv->create([
+            'product_id' => $request->product_id,
+            'vendor_id' => $request->vendor_id,
+            'lot_number' => $request->lot_number,
+            'adjustment_type' => $request->adjustment_type,
+            'quantity' => $request->quantity,
+            'uom' => $request->uom,
+            'expiration_date' => $request->expiration_date,
+            'facility_location' => $request->facility_location,
+            'approve_user' => $request->quarantine_user,
+            'description' => $request->description,
+        ]);
+
+        if ($create) {
+            // $qty = $request->quantity;
+            $product = Product::find($request->product_id);
+            $uom = $request->uom;
+
+            if ($uom == 'g') {
+                $product->quantity = $product->quantity + ($request->quantity / 1000);
+                // $qty = $request->quantity / 1000;
+            } else {
+                $product->quantity = $product->quantity + $request->quantity;
+                // $qty = $request->quantity;
+            }
+
+            
+
+            // if ($request->adjustment_type == 'adjust up' || $request->adjustment_type == 'receive' || $request->adjustment_type == 'return') {
+            //     $product->quantity = $product->quantity + $qty;
+            // } elseif ($request->adjustment_type == 'adjust down' || $request->adjustment_type == 'batch out') {
+            //     $product->quantity = $product->quantity - $qty;
+            // }
+            
+            $product->save();
+        }
+
+        return to_route('inventories.index')->with('success', 'Inventory adjustment created successfully');
+    }
 }

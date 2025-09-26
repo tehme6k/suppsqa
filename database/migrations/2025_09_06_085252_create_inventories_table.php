@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('lot_number')->index();
             $table->string('facility_location');
             // $table->string('warehouse_location');
-            $table->string('adjustment_type');
-            $table->bigInteger('quantity');
+            $table->string('adjustment_type'); //adjust up, adjust down, receive, batch out, return
+            $table->float('quantity', 10, 2);
             $table->string('uom');
             $table->date('expiration_date')->nullable();
             $table->text('description')->nullable();

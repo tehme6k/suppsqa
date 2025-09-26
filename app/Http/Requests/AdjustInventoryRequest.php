@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreInventoryRequest extends FormRequest
+class AdjustInventoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,7 +30,7 @@ class StoreInventoryRequest extends FormRequest
             'uom' => 'required|string|max:50|in:kg,g,lb,ea',
             'expiration_date' => 'required|date|after:today',
             'facility_location' => 'required|string|max:100|in:warehouse,quarantine,production',
-            'adjustment_type' => 'required|string|max:50|in:receive,batch_return,batch_issue,adjustment,initial_stock',
+            'adjustment_type' => 'required|string|max:50',
             'quarantine_user' => 'nullable|exists:users,id',
         ];
     }

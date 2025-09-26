@@ -3,6 +3,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import { index, store } from "@/routes/inventories";
+import { storeAdjustment } from "@/routes/inventory";
 import { buttonVariants, Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -50,15 +51,23 @@ const form = useForm({
     uom: '',
     expiration_date: props.inventory.expiration_date,
     description: '',
-    quarantine_user: props.user.id,
+    approve_user: props.user.id,
 })
+
+const adjustmentType = [
+    { value: 'adjust up', label: 'Adjust Up' },
+    { value: 'adjust down', label: 'Adjust Down' },
+    { value: 'batch out', label: 'Batch Out' },
+    { value: 'return', label: 'Return' },
+    { value: 'damaged', label: 'Damaged' },
+];
 
 console.log('props');
 
 
 
 function submitForm() {
-    form.post(store(), {
+    form.post(storeAdjustment(), {
         preserveScroll: true,
 
         onError: () => {
@@ -166,13 +175,29 @@ const breadcrumbs = [
                                     <InputError :message="form.errors.uom" />
                                 </div>
 
+                                <!-- {{ form.adjustment_type }} -->
+                                <div class="grid w-full gap-2">
+                                    <Label for="adjustment_type">Adjustment Type</Label>
+                                    <Select id="adjustment_type" v-model="form.adjustment_type">
+                                        <SelectTrigger class="w-full">
+                                            <SelectValue placeholder="Select an Adjustment Type" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem v-for="type in adjustmentType" :key="type.value" :value="type.value">
+                                                {{ type.label }}
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <InputError :message="form.errors.adjustment_type" />
+                                </div>
+
 
                             </div>
-                            <!-- <div class="grid w-full gap-2">
+                            <div class="grid w-full gap-2">
                                 <Label for="description">Description</Label>
                                 <Textarea id="description" v-model="form.description" />
                                 <InputError :message="form.errors.description" />
-                            </div> -->
+                            </div>
 
                             <div class="flex justify-between items-center">
                                 <Button variant="default" :disabled="form.processing">Save Inventory</Button>

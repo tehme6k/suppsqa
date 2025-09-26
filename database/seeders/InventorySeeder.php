@@ -27,7 +27,7 @@ class InventorySeeder extends Seeder
             'vendor_id' => Vendor::inRandomOrder()->first()->id,
             'lot_number' => 'abc123',
             'facility_location' => 'quarantine',
-            'adjustment_type' => 'shipment',
+            'adjustment_type' => 'receive',
             'quantity' => '300',
             'uom' => 'kg',
             'expiration_date' => $faker->dateTimeBetween('+1 month', '+1 year')
@@ -44,7 +44,7 @@ class InventorySeeder extends Seeder
             'vendor_id' => Vendor::inRandomOrder()->first()->id,
             'lot_number' => 'abc123',
             'facility_location' => 'quarantine',
-            'adjustment_type' => 'shipment',
+            'adjustment_type' => 'receive',
             'quantity' => '600',
             'uom' => 'kg',
             'expiration_date' => $faker->dateTimeBetween('+1 month', '+1 year')
@@ -59,7 +59,7 @@ class InventorySeeder extends Seeder
             'vendor_id' => Vendor::inRandomOrder()->first()->id,
             'lot_number' => 'abc123',
             'facility_location' => 'quarantine',
-            'adjustment_type' => 'shipment',
+            'adjustment_type' => 'receive',
             'quantity' => '100',
             'uom' => 'kg',
             'expiration_date' => $faker->dateTimeBetween('+1 month', '+1 year')
@@ -74,7 +74,7 @@ class InventorySeeder extends Seeder
             'vendor_id' => Vendor::inRandomOrder()->first()->id,
             'lot_number' => 'xyz567',
             'facility_location' => 'quarantine',
-            'adjustment_type' => 'shipment',
+            'adjustment_type' => 'receive',
             'quantity' => '700',
             'uom' => 'kg',
             'expiration_date' => $faker->dateTimeBetween('+1 month', '+1 year')
