@@ -99,6 +99,7 @@ const breadcrumbs = [
                             <TableHeader label="Id" field="id" :filters="filters" @sort="handleSort" />
                             <TableHeader label="Product Name" field="product_id" :filters="filters"
                                 @sort="handleSort" />
+                            <TableHeader label="Category" field="product_category" :filters="filters" @sort="handleSort" />
                             <TableHeader label="Lot Number" field="lot_number" :filters="filters" @sort="handleSort" />
                             <TableHeader label="Adjustment Type" field="adjustment_type" :filters="filters"
                                 @sort="handleSort" />
@@ -118,6 +119,7 @@ const breadcrumbs = [
                             class="odd:bg-white even:bg-gray-50 border-b border-gray-200">
                             <td class="px-6 py-2 font-medium text-gray-900">{{ inventory.id }}</td>
                             <td class="px-6 py-2 text-gray-700">{{ inventory.product_name }}</td>
+                            <td class="px-6 py-2 text-gray-700">{{ inventory.product_category.name }}</td>
                             <td class="px-6 py-2 text-gray-700">{{ inventory.lot_number }}</td>
                             <td class="px-6 py-2 text-gray-700">{{ inventory.adjustment_type }}</td>
                             <td class="px-6 py-2 text-gray-700">{{ inventory.quantity }}</td>

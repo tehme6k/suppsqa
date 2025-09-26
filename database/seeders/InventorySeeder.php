@@ -33,9 +33,7 @@ class InventorySeeder extends Seeder
             'expiration_date' => $faker->dateTimeBetween('+1 month', '+1 year')
         ]);
 
-        $prod1 = Product::find(1);
-        $prod1->quantity = $prod1->quantity + 300;
-        $prod1->save(); 
+
         
 
         Inventory::create([
@@ -49,9 +47,7 @@ class InventorySeeder extends Seeder
             'uom' => 'kg',
             'expiration_date' => $faker->dateTimeBetween('+1 month', '+1 year')
         ]);
-        // $prod1 = Product::find(1);
-        $prod1->quantity = $prod1->quantity + 600;
-        $prod1->save(); 
+
 
         Inventory::create([
             'product_id' => '1',
@@ -64,12 +60,10 @@ class InventorySeeder extends Seeder
             'uom' => 'kg',
             'expiration_date' => $faker->dateTimeBetween('+1 month', '+1 year')
         ]);
-        // $prod1 = Product::find(1);
-        $prod1->quantity = $prod1->quantity + 100;
-        $prod1->save(); 
+
 
         Inventory::create([
-            'product_id' => 2,
+            'product_id' => 11,
             'quarantine_user' => User::inRandomOrder()->first()->id,
             'vendor_id' => Vendor::inRandomOrder()->first()->id,
             'lot_number' => 'xyz567',
@@ -80,8 +74,6 @@ class InventorySeeder extends Seeder
             'expiration_date' => $faker->dateTimeBetween('+1 month', '+1 year')
         ]);
 
-        $prod1->quantity = $prod1->quantity + 700;
-        $prod1->save(); 
 
     }
 }

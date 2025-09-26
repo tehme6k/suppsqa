@@ -28,6 +28,10 @@ const props = defineProps({
         type: Object,
         required: true
     },
+    category: {
+        type: Object,
+        required: true
+    },
     products: {
         type: Array,
         required: true
@@ -62,7 +66,22 @@ const adjustmentType = [
     { value: 'damaged', label: 'Damaged' },
 ];
 
-console.log('props');
+
+const units = (() => {
+  if (props.inventory.product.category.name === 'Active' || props.inventory.product.category.name === 'Flavor' || props.inventory.product.category.name === 'Color') {
+    return [
+      { value: 'kg', label: 'Kilograms' },
+      { value: 'g', label: 'Grams' },
+    ];
+  } else {
+    return [
+      { value: 'ea', label: 'Each' },
+    ];
+  }
+})();
+
+
+console.log(units);
 
 
 
@@ -101,7 +120,7 @@ const breadcrumbs = [
                 <Card class="mt-3">
 
                     <CardHeader>
-                        <CardTitle>Add to inventory</CardTitle>
+                        <CardTitle>Adjust Inventory for {{ props.inventory.product.name }}</CardTitle>
                     </CardHeader>
 
                     <CardContent class="space-y-3">
@@ -166,10 +185,9 @@ const breadcrumbs = [
                                             <SelectValue placeholder="Select a Unit of measure" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="kg">Kilograms</SelectItem>
-                                            <!-- <SelectItem value="lb">Pounds</SelectItem> -->
-                                            <SelectItem value="ea">Each</SelectItem>
-                                            <SelectItem value="g">Grams</SelectItem>
+                                            <SelectItem v-for="unit in units" :key="unit.value" :value="unit.value">
+                                                {{ unit.label }}
+                                            </SelectItem>
                                         </SelectContent>
                                     </Select>
                                     <InputError :message="form.errors.uom" />

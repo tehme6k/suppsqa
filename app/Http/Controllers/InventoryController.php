@@ -42,7 +42,8 @@ class InventoryController extends Controller
                 'uom' => $inventory->uom,
                 'expiration_date' => $inventory->expiration_date,
                 'product_name' => $inventory->product->name,
-                'created_at' => $inventory->created_at
+                'created_at' => $inventory->created_at,
+                'product_category' => $inventory->product->category,
             ]);
 
 
@@ -90,20 +91,7 @@ class InventoryController extends Controller
             'quarantine_user' => $request->quarantine_user,
         ]);
 
-        if ($create) {
-            $qty = $request->quantity;
-            $uom = $request->uom;
 
-            if ($uom == 'g') {
-                $qty = $request->quantity / 1000;
-            } elseif ($uom == 'lb') {
-                $qty = $request->quantity * 0.453592;
-            }
-
-            $product = Product::find($request->product_id);
-            $product->quantity = $product->quantity + $qty;
-            $product->save();
-        }
 
         return to_route('inventories.index')->with('success', 'Inventory created successfully');
     }
@@ -151,7 +139,7 @@ class InventoryController extends Controller
 
         // dd($quarantineQty, $warehouseQty, $productionQty, $quarantineByLot);
 
-        $inventory->load('product','quarantineUser','approveUser','vendor');
+        $inventory->load('product', 'quarantineUser', 'approveUser', 'vendor');
         $inventory->append('formatted_created_at')->toArray();
         // dd($inventory);
         return Inertia::render('Inventory/Show', [
@@ -183,26 +171,43 @@ class InventoryController extends Controller
         //
     }
 
-    public function approve(Request $request) 
+    public function approve(Request $request)
     {
         $inventory = Inventory::find($request->id);
-        // if(!$inventory){
-        //     return to_route('inventories.index')->with('error', 'Inventory not found');
-        // }
+        
+   
 
         $inventory->facility_location = 'warehouse';
         $inventory->approve_user = auth()->user()->id;
-        $inventory->save();
+        $approve = $inventory->save();
+
+        if ($approve) {
+
+            $qty = $inventory->quantity;
+            $uom = $inventory->uom;
+
+            if ($uom == 'g') {
+                $qty = $inventory->quantity / 1000;
+            } elseif ($uom == 'lb') {
+                $qty = $inventory->quantity * 0.453592;
+            }
+
+            $product = Product::find($inventory->product_id);
+            $product->quantity = $product->quantity + $qty;
+            $product->save();
+        }
+
+
 
         return to_route('inventories.index')->with('success', 'Inventory approved successfully');
     }
 
-    public function adjust(Inventory $inventory) 
+    public function adjust(Inventory $inventory)
     {
         $user = auth()->user();
         $vendors = Vendor::orderBy('name', 'asc')->get();
         $products = Product::orderBy('name', 'asc')->get();
-        $inventory->load('product','vendor');
+        $inventory->load('product.category', 'vendor');
         // dd($inventory);
         return Inertia::render('Inventory/Adjust', [
             'vendors' => $vendors,
@@ -212,16 +217,16 @@ class InventoryController extends Controller
         ]);
     }
 
-    public function storeAdjustment(AdjustInventoryRequest $request) 
+    public function storeAdjustment(AdjustInventoryRequest $request)
     {
 
-        if($request->adjustment_type == 'adjust down' || $request->adjustment_type == 'batch out'){           
-            $request->merge(['quantity' => $request->quantity * -1]);            
+        if ($request->adjustment_type == 'adjust down' || $request->adjustment_type == 'batch out') {
+            $request->merge(['quantity' => $request->quantity * -1]);
         }
 
-        if($request->adjustment_type == 'batch out'){
+        if ($request->adjustment_type == 'batch out') {
             $request->merge(['facility_location' => 'production']);
-        } elseif ($request->adjustment_type == 'damaged'){
+        } elseif ($request->adjustment_type == 'damaged') {
             $request->merge(['facility_location' => 'quarantine']);
         } else {
             $request->merge(['facility_location' => 'warehouse']);
@@ -257,14 +262,14 @@ class InventoryController extends Controller
                 // $qty = $request->quantity;
             }
 
-            
+
 
             // if ($request->adjustment_type == 'adjust up' || $request->adjustment_type == 'receive' || $request->adjustment_type == 'return') {
             //     $product->quantity = $product->quantity + $qty;
             // } elseif ($request->adjustment_type == 'adjust down' || $request->adjustment_type == 'batch out') {
             //     $product->quantity = $product->quantity - $qty;
             // }
-            
+
             $product->save();
         }
 
