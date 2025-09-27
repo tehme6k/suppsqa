@@ -68,7 +68,7 @@ const adjustmentType = [
 
 
 const units = (() => {
-  if (props.inventory.product.category.name === 'Active' || props.inventory.product.category.name === 'Flavor' || props.inventory.product.category.name === 'Color') {
+  if (props.inventory.product.category.uom === 'kg') {
     return [
       { value: 'kg', label: 'Kilograms' },
       { value: 'g', label: 'Grams' },

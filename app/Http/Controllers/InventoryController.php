@@ -63,6 +63,8 @@ class InventoryController extends Controller
         $user = auth()->user();
         $vendors = Vendor::orderBy('name', 'asc')->get();
         $products = Product::orderBy('name', 'asc')->get();
+        $products->load('category');
+        // dd($products);
         return Inertia::render('Inventory/Create', [
             'vendors' => $vendors,
             'products' => $products,

@@ -12,7 +12,7 @@ import {
     Select, SelectContent, SelectItem, SelectLabel, SelectTrigger, SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from "@/components/ui/textarea"
-import { User } from '@/types/index';
+import { ref, watch } from 'vue';
 
 
 
@@ -48,6 +48,38 @@ const form = useForm({
     description: '',
     quarantine_user: props.user.id,
 })
+
+// console.log(form.product_id);
+
+
+
+const selectedUom = ref('');
+const units = ref<{ value: string, label: string }[]>([]);
+
+watch(() => form.product_id, (newVal) => {
+    const selectedProduct = props.products.find(product => product.id === newVal);
+    if (selectedProduct && selectedProduct.category) {
+        selectedUom.value = selectedProduct.category.uom;
+        console.log(selectedUom.value);
+    } else {
+        selectedUom.value = '';
+    }
+});
+
+watch(selectedUom, (uom) => {
+    if (uom === 'kg') {
+        units.value = [
+            {value: 'lb', label: 'Pounds'},
+            { value: 'kg', label: 'Kilograms' },
+            { value: 'g', label: 'Grams' },
+        ];
+    } else if (uom === 'ea') {
+        units.value = [
+            { value: 'ea', label: 'Each' },
+        ];
+    }
+}, { immediate: true });
+// console.log(units);
 
 
 
@@ -151,27 +183,26 @@ const breadcrumbs = [
                                             <SelectValue placeholder="Select a Unit of measure" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="kg">Kilograms</SelectItem>
-                                            <SelectItem value="lb">Pounds</SelectItem>
-                                            <SelectItem value="ea">Each</SelectItem>
-                                            <SelectItem value="g">Grams</SelectItem>
+                                            <SelectItem v-for="unit in units" :key="unit.value" :value="unit.value">
+                                                {{ unit.label }}
+                                            </SelectItem>
                                         </SelectContent>
                                     </Select>
                                     <InputError :message="form.errors.uom" />
                                 </div>
 
-                                
+
                             </div>
                             <div class="grid w-full gap-2">
-                                    <Label for="description">Description</Label>
-                                    <Textarea id="description" v-model="form.description" />
-                                    <InputError :message="form.errors.description" />
-                                </div>
+                                <Label for="description">Description</Label>
+                                <Textarea id="description" v-model="form.description" />
+                                <InputError :message="form.errors.description" />
+                            </div>
 
-                                <div class="flex justify-between items-center">
-                                    <Button variant="default" :disabled="form.processing">Save Inventory</Button>
-                                    <Link :href="index()" :class="buttonVariants({ variant: 'ghost' })">Cancel</Link>
-                                </div>
+                            <div class="flex justify-between items-center">
+                                <Button variant="default" :disabled="form.processing">Save Inventory</Button>
+                                <Link :href="index()" :class="buttonVariants({ variant: 'ghost' })">Cancel</Link>
+                            </div>
                         </form>
                     </CardContent>
 

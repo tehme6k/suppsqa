@@ -13,12 +13,15 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Category::create(['name' => 'Active']);
-        Category::create(['name' => 'Flavor']);
-        Category::create(['name' => 'Color']);
-        Category::create(['name' => 'Lid']);
-        Category::create(['name' => 'Bottle']);
-        Category::create(['name' => 'Scoop']);
-        Category::create(['name' => 'Dessicant']);
+        Category::create(['name' => 'Active', 'uom' => 'kg']);
+        Category::create(['name' => 'Flavor', 'uom' => 'kg']);
+        Category::create(['name' => 'Color', 'uom' => 'kg']);
+        Category::create(['name' => 'Lid', 'uom' => 'ea']);
+        Category::create(['name' => 'Bottle', 'uom' => 'ea']);
+        Category::create(['name' => 'Scoop', 'uom' => 'ea']);
+        Category::create(['name' => 'Dessicant', 'uom' => 'ea']);
+        Category::create(['name' => 'Label', 'uom' => 'ea']);
+        Category::create(['name' => 'Box', 'uom' => 'ea']);
+        Category::create(['name' => 'Capsule', 'uom' => 'ea']);
     }
 }
